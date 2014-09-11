@@ -9,45 +9,35 @@ var fs = require('fs'),
     program = require('commander');
 
 program
-    .version('0.0.1')
+    .version('0.0.3')
     .option('-l, --listen <n>', 'Listen', parseInt)
     .option('-t, --target <n>', 'Target', parseInt)
+    // Idea for future customizations
+    //.option('-h, --host', 'Host')
     .parse(process.argv);
 
 
 var listenport = program.listen || 1337,
     targetport = program.target || 9000;
 
-//
-// Create a proxy server with custom application logic
-//
 var proxy = httpProxy.createProxyServer({});
 
-// To modify the proxy connection before data is sent, you can listen
-// for the 'proxyReq' event. When the event is fired, you will receive
-// the following arguments:
-// (http.ClientRequest proxyReq, http.IncomingMessage req,
-//  http.ServerResponse res, Object options). This mechanism is useful when
-// you need to modify the proxy request before the proxy connection
-// is made to the target.
-//
-
-var labsCiRegex = /(^llabsci\.redhat\.com)/,
+var labsCiRegex = /(^foo\.redhat\.com)/,
     rewriteRegex = /^\/(chrome_themes|webassets|services).*/;
 
 proxy.on('proxyReq', function(proxyReq, req, res, options) {
   res.setHeader('Access-Control-Allow-Origin', '*');
 });
 
+// Catch errors...
 proxy.on('error', function(e) {});
+
 var currentDir = path.join(path.dirname(fs.realpathSync(__filename)), '.');
 
 var server = https.createServer({
     key: fs.readFileSync(currentDir + '/key.pem'),
     cert: fs.readFileSync(currentDir + '/cert.pem'),
 }, function(req, res) {
-    // You can define here your custom logic to handle the request
-    // and then proxy the request.
     var host = req.headers.host,
         url = req.url;
     var loopback = 'http://localhost:' + targetport;
