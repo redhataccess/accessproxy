@@ -3,6 +3,7 @@
 'use strict';
 
 var fs = require('fs'),
+    path = require('path'),
     https = require('https'),
     httpProxy = require('http-proxy'),
     program = require('commander');
@@ -39,10 +40,11 @@ proxy.on('proxyReq', function(proxyReq, req, res, options) {
 });
 
 proxy.on('error', function(e) {});
+var currentDir = path.join(path.dirname(fs.realpathSync(__filename)), '.');
 
 var server = https.createServer({
-    key: fs.readFileSync('key.pem'),
-    cert: fs.readFileSync('cert.pem'),
+    key: fs.readFileSync(currentDir + '/key.pem'),
+    cert: fs.readFileSync(currentDir + '/cert.pem'),
 }, function(req, res) {
     // You can define here your custom logic to handle the request
     // and then proxy the request.
