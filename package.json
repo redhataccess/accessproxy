@@ -1,6 +1,6 @@
 {
   "name": "accesslabsproxy",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "main": "cli.js",
   "description": "Proxy.",
   "homepage": "connyay/accesslabsproxy",
@@ -21,5 +21,8 @@
   "dependencies": {
     "commander": "^2.3.0",
     "http-proxy": "^1.3.0"
+  },
+  "scripts": {
+    "postinstall": "sudo ./addhost.sh"
   }
 }
