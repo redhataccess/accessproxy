@@ -9,7 +9,7 @@ var fs = require('fs'),
     program = require('commander');
 
 program
-    .version('0.0.5')
+    .version('0.0.6')
     .option('-l, --listen <n>', 'Listen', parseInt)
     .option('-t, --target <n>', 'Target', parseInt)
     // Idea for future customizations
