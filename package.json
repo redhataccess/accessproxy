@@ -1,6 +1,6 @@
 {
   "name": "accesslabsproxy",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "main": "cli.js",
   "description": "Proxy.",
   "homepage": "connyay/accesslabsproxy",

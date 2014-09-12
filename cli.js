@@ -6,10 +6,11 @@ var fs = require('fs'),
     path = require('path'),
     https = require('https'),
     httpProxy = require('http-proxy'),
-    program = require('commander');
+    program = require('commander'),
+    version = require('./package.json').version;
 
 program
-    .version('0.0.7')
+    .version(version)
     .option('-l, --listen <n>', 'Listen', parseInt)
     .option('-t, --target <n>', 'Target', parseInt)
     // Idea for future customizations
@@ -43,7 +44,8 @@ var server = https.createServer({
     var loopback = 'http://localhost:' + targetport;
     var options = {
         target: loopback,
-        secure: false
+        secure: false,
+        prependPath: false
     };
     res.setHeader('Access-Control-Allow-Origin', '*');
 
