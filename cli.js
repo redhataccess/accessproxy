@@ -42,7 +42,8 @@ var server = https.createServer({
         url = req.url;
     var loopback = 'http://localhost:' + targetport;
     var options = {
-        target: loopback + url
+        target: loopback + url,
+        secure: false
     };
     res.setHeader('Access-Control-Allow-Origin', '*');
 
