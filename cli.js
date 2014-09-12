@@ -9,7 +9,7 @@ var fs = require('fs'),
     program = require('commander');
 
 program
-    .version('0.0.4')
+    .version('0.0.5')
     .option('-l, --listen <n>', 'Listen', parseInt)
     .option('-t, --target <n>', 'Target', parseInt)
     // Idea for future customizations
@@ -54,6 +54,7 @@ var server = https.createServer({
     if (labsCiRegex.test(host) && rewriteRegex.test(url)) {
         options.target = 'https://access.devgssci.devlab.phx1.redhat.com' + url;
         options.secure = false;
+        options.prependPath = false;
     }
     proxy.web(req, res, options);
 });
