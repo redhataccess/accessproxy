@@ -9,7 +9,7 @@ var fs = require('fs'),
     program = require('commander');
 
 program
-    .version('0.0.6')
+    .version('0.0.7')
     .option('-l, --listen <n>', 'Listen', parseInt)
     .option('-t, --target <n>', 'Target', parseInt)
     // Idea for future customizations
@@ -42,7 +42,7 @@ var server = https.createServer({
         url = req.url;
     var loopback = 'http://localhost:' + targetport;
     var options = {
-        target: loopback + url,
+        target: loopback,
         secure: false
     };
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -53,9 +53,7 @@ var server = https.createServer({
     //     options.secure = false;
     // }
     if (labsCiRegex.test(host) && rewriteRegex.test(url)) {
-        options.target = 'https://access.devgssci.devlab.phx1.redhat.com' + url;
-        options.secure = false;
-        options.prependPath = false;
+        options.target = 'https://access.devgssci.devlab.phx1.redhat.com';
     }
     proxy.web(req, res, options);
 });

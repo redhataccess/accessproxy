@@ -1,6 +1,6 @@
 {
   "name": "accesslabsproxy",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "main": "cli.js",
   "description": "Proxy.",
   "homepage": "connyay/accesslabsproxy",
@@ -19,7 +19,7 @@
   },
   "preferGlobal": "true",
   "dependencies": {
-    "commander": "^2.3.0",
-    "http-proxy": "^1.3.0"
+    "commander": "~2.3.0",
+    "http-proxy": "~1.4.0"
   }
 }
