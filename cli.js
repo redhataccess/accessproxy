@@ -64,8 +64,9 @@ function initServer() {
         proxy.web(req, res, options);
     });
 
-    console.log('proxy listening on port ' + listenport);
-    console.log('proxy redirecting to port ' + targetport);
+    console.log('\nproxy listening on port ' + (listenport+'').bold.white);
+    console.log('proxy redirecting to port ' + (targetport+'').bold.white);
+    console.log('using ' + ciServer.bold.white + ' as the ci server');
     server.listen(listenport);
 }
 var labsCiLocation = process.env.HOME + '/.accesslabsci';
@@ -84,14 +85,15 @@ try {
     ciServer = fs.readFileSync(labsCiLocation) + '';
     initServer();
 } catch (e) {
-    prompt.message = 'Yo! Couldn\'t find a ci server to point to...'.white;
-    prompt.delimiter = '><'.green;
+    console.log('\nYo! Couldn\'t find a ci server to point to...'.red.bold);
+    prompt.message = '';
+    prompt.delimiter = '---'.green;
     prompt.start();
 
     prompt.get({
         properties: {
             labsci: {
-                description: 'Where should I point?'.magenta
+                description: '  Where should I point?  '.white
             }
         }
     }, function(err, result) {
