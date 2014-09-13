@@ -8,5 +8,5 @@ grep -q "$hostline" "$filename"
 
 if [ $? -ne 0 ]
 then
-  echo "$hostline" >> "$filename"
+    echo -e "$hostline" | sudo tee -a "$filename" > /dev/null
 fi

@@ -1,6 +1,6 @@
 {
   "name": "accesslabsproxy",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "main": "cli.js",
   "description": "A proxy for local access labs development",
   "homepage": "https://github.com/connyay/accesslabsproxy",
@@ -16,6 +16,9 @@
   "license": "MIT",
   "bin": {
     "accesslabsproxy": "cli.js"
+  },
+  "scripts": {
+    "postinstall": "./addhost.sh"
   },
   "preferGlobal": "true",
   "dependencies": {
