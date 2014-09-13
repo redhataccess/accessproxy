@@ -68,7 +68,7 @@ function initServer() {
     console.log('proxy redirecting to port ' + targetport);
     server.listen(listenport);
 }
-var labsCiLocation = process.env.HOME + '/.labsci';
+var labsCiLocation = process.env.HOME + '/.accesslabsci';
 if (program.remove) {
     try {
         fs.unlinkSync(labsCiLocation);
