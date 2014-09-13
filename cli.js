@@ -14,6 +14,7 @@ program
     .version(version)
     .option('-l, --listen <n>', 'Listen', parseInt)
     .option('-t, --target <n>', 'Target', parseInt)
+    .option('-v, --verbose', 'Verbose')
     .option('-r, --remove', 'Remove')
     .parse(process.argv);
 
@@ -33,6 +34,12 @@ var labsRegex = /(^prod\.foo\.redhat\.com)/,
 proxy.on('error', function() {});
 
 var currentDir = path.join(path.dirname(fs.realpathSync(__filename)), '.');
+
+function verboseLog(type, url, source, target) {
+    if (program.verbose) {
+        console.log(type + ' ' + (source + url).red + ' ---> ' + (target + url).green);
+    }
+}
 
 function initServer() {
     var server = https.createServer({
@@ -59,14 +66,17 @@ function initServer() {
                 // Does not seem like I should be able to do this...
                 req.headers.host = target;
                 options.target = 'https://' + target;
+                verboseLog('rewrite', url, host, target);
             }
+        } else {
+            verboseLog('loopback', url, host, loopback);
         }
         proxy.web(req, res, options);
     });
 
-    console.log('\nproxy listening on port ' + (listenport+'').bold.white);
-    console.log('proxy redirecting to port ' + (targetport+'').bold.white);
-    console.log('using ' + ciServer.bold.white + ' as the ci server');
+    console.log('\nproxy listening on port ' + (listenport + '').bold.white);
+    console.log('proxy redirecting to port ' + (targetport + '').bold.white);
+    console.log('using ' + ciServer.bold.white + ' as the ci server\n\n');
     server.listen(listenport);
 }
 var labsCiLocation = process.env.HOME + '/.accesslabsci';
