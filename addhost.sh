@@ -1,6 +1,6 @@
 #!/bin/bash
 
-domain=foo.redhat.com
+domain="foo.redhat.com prod.foo.redhat.com"
 hostline="127.0.0.1 $domain"
 filename=/etc/hosts
 

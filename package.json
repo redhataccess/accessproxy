@@ -1,17 +1,17 @@
 {
   "name": "accesslabsproxy",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "main": "cli.js",
-  "description": "Proxy.",
-  "homepage": "connyay/accesslabsproxy",
-  "bugs": "connyay/accesslabsproxy/issues",
+  "description": "A proxy for local access labs development",
+  "homepage": "https://github.com/connyay/accesslabsproxy",
+  "bugs": "https://github.com/connyay/accesslabsproxy/issues",
   "author": {
-    "name": "",
-    "email": ""
+    "name": "Connor Hindley",
+    "email": "chindley@redhat.com"
   },
   "repository": {
     "type": "git",
-    "url": "connyay/accesslabsproxy"
+    "url": "https://github.com/connyay/accesslabsproxy"
   },
   "license": "MIT",
   "bin": {
@@ -20,6 +20,7 @@
   "preferGlobal": "true",
   "dependencies": {
     "commander": "~2.3.0",
-    "http-proxy": "~1.4.0"
+    "http-proxy": "~1.4.0",
+    "prompt": "^0.2.13"
   }
 }
