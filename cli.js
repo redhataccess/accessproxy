@@ -68,10 +68,10 @@ function initServer() {
     console.log('proxy redirecting to port ' + targetport);
     server.listen(listenport);
 }
-
+var labsCiLocation = process.env.HOME + '/.labsci';
 if (program.remove) {
     try {
-        fs.unlinkSync(currentDir + '/labsci');
+        fs.unlinkSync(labsCiLocation);
         console.log('Removed labsci file');
     } catch (e) {
         console.log('Errored removing labsci file. Did it exist?');
@@ -81,7 +81,7 @@ if (program.remove) {
 }
 
 try {
-    ciServer = fs.readFileSync(currentDir + '/labsci') + '';
+    ciServer = fs.readFileSync(labsCiLocation) + '';
     initServer();
 } catch (e) {
     prompt.message = 'Yo! Couldn\'t find a ci server to point to...'.white;
@@ -97,7 +97,7 @@ try {
     }, function(err, result) {
         if (result && result.labsci) {
             console.log('Pointing at: '.cyan + result.labsci.cyan);
-            fs.writeFileSync(currentDir + '/labsci', result.labsci);
+            fs.writeFileSync(labsCiLocation, result.labsci);
             ciServer = result.labsci;
             initServer();
         }
