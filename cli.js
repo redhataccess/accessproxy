@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-
 'use strict';
 
 var fs = require('fs'),
@@ -12,10 +11,10 @@ var fs = require('fs'),
 
 program
     .version(version)
-    .option('-l, --listen <n>', 'Listen', parseInt)
-    .option('-t, --target <n>', 'Target', parseInt)
-    .option('-v, --verbose', 'Verbose')
-    .option('-r, --remove', 'Remove')
+    .option('-l, --listen <n>', 'The port to listen on', parseInt)
+    .option('-t, --target <n>', 'The port to loopback to', parseInt)
+    .option('-v, --verbose', 'Enable verbose logging')
+    .option('-r, --remove', 'Remove the stored labs ci server')
     .parse(process.argv);
 
 
@@ -76,8 +75,14 @@ function initServer() {
 
     console.log('\nproxy listening on port ' + (listenport + '').bold.white);
     console.log('proxy redirecting to port ' + (targetport + '').bold.white);
-    console.log('using ' + ciServer.bold.white + ' as the ci server\n\n');
+    console.log('using ' + ciServer.bold.white + ' as the ci server\n');
     server.listen(listenport);
+    if (program.verbose) {
+        var line = '------------------------------------------------------------';
+        console.log(line);
+        console.log('\t\t\tPROXY LOG'.bold);
+        console.log(line);
+    }
 }
 var labsCiLocation = process.env.HOME + '/.accesslabsci';
 if (program.remove) {
