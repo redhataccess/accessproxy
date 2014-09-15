@@ -17,6 +17,7 @@ npm run -g accesslabsproxy hosts --unsafe
 
 _Note about the `--unsafe`_: This allows the npm script to run as YOUR user... by default npm runs scripts as 'nobody'. This will just execute the [hosts.sh](hosts.sh) script. Feel free to browse that script if you don't trust me. :smirk:
 
+On first run you will be prompted to enter a ci server location. Enter this **without** the protocol i.e. `the.ci.server.com`
 
 ## License
 
