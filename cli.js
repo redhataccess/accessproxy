@@ -13,6 +13,7 @@ program
     .version(version)
     .option('-l, --listen <n>', 'The port to listen on', parseInt)
     .option('-t, --target <n>', 'The port to loopback to', parseInt)
+    .option('-T, --hostname <hostname>', 'The hostname to loopback to')
     .option('-v, --verbose', 'Enable verbose logging')
     .option('-r, --remove', 'Remove the stored labs ci server')
     .parse(process.argv);
@@ -47,7 +48,11 @@ function initServer() {
     }, function(req, res) {
         var host = req.headers.host,
             url = req.url;
-        var loopback = 'http://localhost:' + targetport;
+        var targethostname = 'localhost';
+        if (program.hostname) {
+          targethostname = program.hostname;
+        }
+        var loopback = 'http://' + targethostname + ':' + targetport;
         var options = {
             target: loopback,
             secure: false,
