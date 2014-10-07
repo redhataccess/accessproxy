@@ -1,6 +1,6 @@
 {
   "name": "accesslabsproxy",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "main": "cli.js",
   "description": "A proxy for local access labs development",
   "homepage": "https://github.com/connyay/accesslabsproxy",
