@@ -31,7 +31,7 @@ var proxy = httpProxy.createProxyServer({});
 // Cached regex(s)
 var labsRegex = /(^prod\.foo\.redhat\.com)/,
     labsCiRegex = /(^foo\.redhat\.com)/,
-    rewriteRegex = /^\/(chrome_themes|webassets|services).*/;
+    rewriteRegex = /^\/(chrome_themes|webassets|services|rs).*/;
 
 // Prevent proxy from bombing out
 proxy.on('error', function() {});
