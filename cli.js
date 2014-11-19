@@ -1,8 +1,10 @@
 #!/usr/bin/env node
+
 'use strict';
 
 var fs = require('fs'),
     path = require('path'),
+    os = require('os'),
     https = require('https'),
     httpProxy = require('http-proxy'),
     program = require('commander'),
@@ -14,6 +16,7 @@ program
     .option('-l, --listen <n>', 'The port to listen on', parseInt)
     .option('-t, --target <n>', 'The port to loopback to', parseInt)
     .option('-T, --hostname <hostname>', 'The hostname to loopback to')
+    .option('-p, --proxy <hostname>', 'The hostname to proxy to')
     .option('-v, --verbose', 'Enable verbose logging')
     .option('-r, --remove', 'Remove the stored labs ci server')
     .parse(process.argv);
@@ -50,7 +53,7 @@ function initServer() {
             url = req.url;
         var targethostname = 'localhost';
         if (program.hostname) {
-          targethostname = program.hostname;
+            targethostname = program.hostname;
         }
         var loopback = 'http://' + targethostname + ':' + targetport;
         var options = {
@@ -99,6 +102,15 @@ if (program.remove) {
     } finally {
         process.exit(0);
     }
+}
+
+if (program.proxy) {
+    ciServer = program.proxy;
+    return initServer();
+}
+if (!program.proxy && os.type().indexOf('Windows') === 0) {
+    console.log('\nWINDOWS FAILBOAT. -> Pass in a proxy hostname with `-p`'.red.bold);
+    return process.exit(1);
 }
 
 try {
