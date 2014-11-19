@@ -18,7 +18,8 @@ program
     .option('-T, --hostname <hostname>', 'The hostname to loopback to')
     .option('-p, --proxy <hostname>', 'The hostname to proxy to')
     .option('-v, --verbose', 'Enable verbose logging')
-    .option('-r, --remove', 'Remove the stored labs ci server')
+    .option('-portal, --portal', 'Portal proxy behavior')
+    .option('-R, --remove', 'Remove the stored labs ci server')
     .parse(process.argv);
 
 
@@ -31,7 +32,8 @@ var proxy = httpProxy.createProxyServer({});
 // Cached regex(s)
 var labsRegex = /(^prod\.foo\.redhat\.com)/,
     labsCiRegex = /(^foo\.redhat\.com)/,
-    rewriteRegex = /^\/(chrome_themes|webassets|services).*/;
+    portalRewriteRegex = /^\/(chrome_themes|webassets).*/,
+    labsRewriteRegex = /^\/(rs|chrome_themes|webassets|services).*/;
 
 // Prevent proxy from bombing out
 proxy.on('error', function() {});
@@ -44,42 +46,85 @@ function verboseLog(type, url, source, target) {
     }
 }
 
-function initServer() {
-    var server = https.createServer({
-        key: fs.readFileSync(currentDir + '/key.pem'),
-        cert: fs.readFileSync(currentDir + '/cert.pem'),
-    }, function(req, res) {
-        var host = req.headers.host,
-            url = req.url;
+
+function labsProxy(req, res) {
+    var host = req.headers.host,
+        url = req.url;
+    var targethostname = 'localhost';
+    if (program.hostname) {
+        targethostname = program.hostname;
+    }
+    var loopback = 'http://' + targethostname + ':' + targetport;
+    var options = {
+        target: loopback,
+        secure: false,
+        prependPath: false
+    };
+
+    if (labsRewriteRegex.test(url)) {
+        var target;
+        if (labsRegex.test(host)) {
+            target = 'access.redhat.com';
+        } else if (labsCiRegex.test(host)) {
+            target = ciServer;
+        }
+        if (target) {
+            // Does not seem like I should be able to do this...
+            req.headers.host = target;
+            options.target = 'https://' + target;
+            verboseLog('rewrite', url, host, target);
+        }
+    } else {
+        verboseLog('loopback', url, host, loopback);
+    }
+    proxy.web(req, res, options);
+}
+
+function portalProxy(req, res) {
+    var host = req.headers.host,
+        url = req.url;
+
+    var target;
+    if (labsRegex.test(host)) {
+        target = 'access.redhat.com';
+    } else if (labsCiRegex.test(host)) {
+        target = ciServer;
+    }
+    var loopback = 'https://' + target;
+
+    var options = {
+        target: loopback,
+        secure: false,
+        prependPath: false
+    };
+
+    if (portalRewriteRegex.test(url)) {
+        req.url = req.url.replace('/webassets/avalon/', '/');
         var targethostname = 'localhost';
         if (program.hostname) {
             targethostname = program.hostname;
         }
-        var loopback = 'http://' + targethostname + ':' + targetport;
-        var options = {
-            target: loopback,
-            secure: false,
-            prependPath: false
-        };
-
-        if (rewriteRegex.test(url)) {
-            var target;
-            if (labsRegex.test(host)) {
-                target = 'access.redhat.com';
-            } else if (labsCiRegex.test(host)) {
-                target = ciServer;
-            }
-            if (target) {
-                // Does not seem like I should be able to do this...
-                req.headers.host = target;
-                options.target = 'https://' + target;
-                verboseLog('rewrite', url, host, target);
-            }
-        } else {
-            verboseLog('loopback', url, host, loopback);
+        if (targethostname) {
+            targethostname = targethostname + ':' + targetport;
+            // Does not seem like I should be able to do this...
+            req.headers.host = targethostname;
+            options.target = 'http://' + targethostname;
+            verboseLog('rewrite', url, host, targethostname);
         }
-        proxy.web(req, res, options);
-    });
+    } else {
+        verboseLog('loopback', url, host, loopback);
+    }
+    proxy.web(req, res, options);
+}
+
+
+function initServer() {
+    var proxyFn = (program.portal) ? portalProxy : labsProxy;
+
+    var server = https.createServer({
+        key: fs.readFileSync(currentDir + '/key.pem'),
+        cert: fs.readFileSync(currentDir + '/cert.pem'),
+    }, proxyFn);
 
     console.log('\nproxy listening on port ' + (listenport + '').bold.white);
     console.log('proxy redirecting to port ' + (targetport + '').bold.white);
