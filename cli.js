@@ -33,7 +33,9 @@ var proxy = httpProxy.createProxyServer({});
 var labsRegex = /(^prod\.foo\.redhat\.com)/,
     labsCiRegex = /(^foo\.redhat\.com)/,
     portalRewriteRegex = /^\/(chrome_themes|webassets).*/,
-    labsRewriteRegex = /^\/(rs|chrome_themes|webassets|services).*/;
+    labsRewriteRegex = /^\/(rs|chrome_themes|webassets|services).*/,
+    liveReloadRegex = /^\/livereload.js/;
+
 
 // Prevent proxy from bombing out
 proxy.on('error', function() {});
@@ -60,6 +62,12 @@ function labsProxy(req, res) {
         secure: false,
         prependPath: false
     };
+
+    if (liveReloadRegex.test(url)) {
+        req.headers.host = targethostname;
+        loopback = 'http://' + targethostname + ':35729';
+        options.target = loopback;
+    }
 
     if (labsRewriteRegex.test(url)) {
         var target;
