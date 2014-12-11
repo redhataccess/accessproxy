@@ -11,6 +11,7 @@ var fs = require('fs'),
     prompt = require('prompt'),
     nodeStatic = require('node-static'),
     modes = require('./lib/modes'),
+    hijack = require('./lib/hijack'),
     options = require('./lib/options'),
     version = require('./package.json').version;
 
@@ -36,17 +37,23 @@ var proxy = httpProxy.createProxyServer({});
 
 // Prevent proxy from bombing out
 proxy.on('error', function() {});
+
+if (program.mode === 'portal' || program.mode === 'mixed') {
+    proxy.on('proxyRes', function(proxyRes, req, res) {
+        hijack(proxyRes, req, res);
+    });
+}
+
 var currentDir = path.join(path.dirname(fs.realpathSync(__filename)), '.');
 
-function initStatic() {
+function initStatic(port) {
     var staticPath = program['static'];
     var file = new nodeStatic.Server(staticPath);
-
     require('http').createServer(function(req, res) {
         req.addListener('end', function() {
             file.serve(req, res);
         }).resume();
-    }).listen(targetport + 1);
+    }).listen(port);
 }
 
 function initServer() {
@@ -64,8 +71,11 @@ function initServer() {
     console.log('using ' + ciServer.bold.white + ' as the ci server\n');
     options.set('ciServer', ciServer);
     server.listen(listenport);
+    if (program.mode === 'portal') {
+        initStatic(targetport);
+    }
     if (program.mode === 'mixed') {
-        initStatic();
+        initStatic(targetport + 1);
     }
     if (program.verbose) {
         var line = '------------------------------------------------------------';
