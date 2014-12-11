@@ -24,6 +24,7 @@
   "dependencies": {
     "commander": "~2.3.0",
     "http-proxy": "~1.4.0",
+    "node-static": "~0.7.6",
     "prompt": "^0.2.13"
   }
 }

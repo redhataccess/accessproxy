@@ -9,135 +9,64 @@ var fs = require('fs'),
     httpProxy = require('http-proxy'),
     program = require('commander'),
     prompt = require('prompt'),
+    nodeStatic = require('node-static'),
+    modes = require('./lib/modes'),
+    options = require('./lib/options'),
     version = require('./package.json').version;
 
 program
     .version(version)
-    .option('-l, --listen <n>', 'The port to listen on', parseInt)
-    .option('-t, --target <n>', 'The port to loopback to', parseInt)
+    .option('-l, --listen <n>', 'The port to listen on', parseInt, 1337)
+    .option('-t, --target <n>', 'The port to loopback to', parseInt, 9000)
     .option('-T, --hostname <hostname>', 'The hostname to loopback to')
     .option('-p, --proxy <hostname>', 'The hostname to proxy to')
     .option('-v, --verbose', 'Enable verbose logging')
-    .option('-portal, --portal', 'Portal proxy behavior')
+    .option('-m, --mode <mode>', 'Proxy mode (labs, portal, or mixed)', 'labs')
+    .option('-s, --static <path>', 'Path to serve up static assets', './')
     .option('-R, --remove', 'Remove the stored labs ci server')
     .parse(process.argv);
 
-
-var listenport = program.listen || 1337,
-    targetport = program.target || 9000,
+options.mixin(program);
+var listenport = program.listen,
+    targetport = program.target,
     ciServer;
 
 var proxy = httpProxy.createProxyServer({});
 
-// Cached regex(s)
-var labsRegex = /(^prod\.foo\.redhat\.com)/,
-    labsCiRegex = /(^foo\.redhat\.com)/,
-    portalRewriteRegex = /^\/(chrome_themes|webassets).*/,
-    labsRewriteRegex = /^\/(rs|chrome_themes|webassets|services).*/,
-    liveReloadRegex = /^\/livereload.js/;
-
 
 // Prevent proxy from bombing out
 proxy.on('error', function() {});
-
 var currentDir = path.join(path.dirname(fs.realpathSync(__filename)), '.');
 
-function verboseLog(type, url, source, target) {
-    if (program.verbose) {
-        console.log(type + ' ' + (source + url).red + ' ---> ' + (target + url).green);
-    }
+function initStatic() {
+    var staticPath = program['static'];
+    var file = new nodeStatic.Server(staticPath);
+
+    require('http').createServer(function(req, res) {
+        req.addListener('end', function() {
+            file.serve(req, res);
+        }).resume();
+    }).listen(targetport + 1);
 }
-
-
-function labsProxy(req, res) {
-    var host = req.headers.host,
-        url = req.url;
-    var targethostname = 'localhost';
-    if (program.hostname) {
-        targethostname = program.hostname;
-    }
-    var loopback = 'http://' + targethostname + ':' + targetport;
-    var options = {
-        target: loopback,
-        secure: false,
-        prependPath: false
-    };
-
-    if (liveReloadRegex.test(url)) {
-        req.headers.host = targethostname;
-        loopback = 'http://' + targethostname + ':35729';
-        options.target = loopback;
-    }
-
-    if (labsRewriteRegex.test(url)) {
-        var target;
-        if (labsRegex.test(host)) {
-            target = 'access.redhat.com';
-        } else if (labsCiRegex.test(host)) {
-            target = ciServer;
-        }
-        if (target) {
-            // Does not seem like I should be able to do this...
-            req.headers.host = target;
-            options.target = 'https://' + target;
-            verboseLog('rewrite', url, host, target);
-        }
-    } else {
-        verboseLog('loopback', url, host, loopback);
-    }
-    proxy.web(req, res, options);
-}
-
-function portalProxy(req, res) {
-    var host = req.headers.host,
-        url = req.url;
-
-    var target;
-    if (labsRegex.test(host)) {
-        target = 'access.redhat.com';
-    } else if (labsCiRegex.test(host)) {
-        target = ciServer;
-    }
-    var loopback = 'https://' + target;
-
-    var options = {
-        target: loopback,
-        secure: false,
-        prependPath: false
-    };
-
-    if (portalRewriteRegex.test(url)) {
-        req.url = req.url.replace('/webassets/avalon/', '/');
-        var targethostname = 'localhost';
-        if (program.hostname) {
-            targethostname = program.hostname;
-        }
-        if (targethostname) {
-            targethostname = targethostname + ':' + targetport;
-            // Does not seem like I should be able to do this...
-            req.headers.host = targethostname;
-            options.target = 'http://' + targethostname;
-            verboseLog('rewrite', url, host, targethostname);
-        }
-    } else {
-        verboseLog('loopback', url, host, loopback);
-    }
-    proxy.web(req, res, options);
-}
-
 
 function initServer() {
-    var proxyFn = (program.portal) ? portalProxy : labsProxy;
+    var modeFn = (modes[program.mode]) ? modes[program.mode] : modes.labs;
 
     var server = https.createServer({
         key: fs.readFileSync(currentDir + '/key.pem'),
         cert: fs.readFileSync(currentDir + '/cert.pem'),
-    }, proxyFn);
+    }, function(req, res) {
+        proxy.web.apply(proxy, modeFn(req, res));
+    });
 
     console.log('\nproxy listening on port ' + (listenport + '').bold.white);
     console.log('proxy redirecting to port ' + (targetport + '').bold.white);
     console.log('using ' + ciServer.bold.white + ' as the ci server\n');
+    options.set('ciServer', ciServer);
     server.listen(listenport);
+    if (program.mode === 'mixed') {
+        initStatic();
+    }
     if (program.verbose) {
         var line = '------------------------------------------------------------';
         console.log(line);
@@ -145,6 +74,7 @@ function initServer() {
         console.log(line);
     }
 }
+
 var labsCiLocation = process.env.HOME + '/.accesslabsci';
 if (program.remove) {
     try {
