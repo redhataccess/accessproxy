@@ -18,8 +18,8 @@ program
     .option('-s, --static <path>', 'Path to serve up static assets', './');
 
 program
-    .command('*')
-    .description('')
+    .command('default')
+    .description('Start proxy server')
     .action(commands._default);
 
 program.parse(process.argv);
