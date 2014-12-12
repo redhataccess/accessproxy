@@ -2,7 +2,7 @@
   "curly": true,
   "eqeqeq": true,
   "immed": true,
-  "latedef": true,
+  "latedef": "function",
   "newcap": true,
   "noarg": true,
   "sub": true,

@@ -1,7 +1,7 @@
 {
   "name": "accesslabsproxy",
   "version": "0.1.1",
-  "main": "cli.js",
+  "main": "index.js",
   "description": "A proxy for local access labs development",
   "homepage": "https://github.com/connyay/accesslabsproxy",
   "bugs": "https://github.com/connyay/accesslabsproxy/issues",
@@ -15,19 +15,16 @@
   },
   "license": "MIT",
   "bin": {
-    "accesslabsproxy": "cli.js"
+    "accesslabsproxy": "index.js"
   },
   "scripts": {
     "hosts": "./hosts.sh"
   },
   "preferGlobal": "true",
   "dependencies": {
-    "body-parser": "~1.10.0",
+    "colors": "~1.0.3",
     "commander": "~2.3.0",
-    "connect": "~3.3.3",
-    "harmon": "~1.1.0",
     "http-proxy": "~1.4.0",
-    "node-static": "~0.7.6",
-    "prompt": "^0.2.13"
+    "node-static": "~0.7.6"
   }
 }
