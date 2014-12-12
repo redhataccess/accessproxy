@@ -18,6 +18,11 @@ program
     .option('-s, --static <path>', 'Path to serve up static assets', './');
 
 program
+    .command('configure')
+    .description('Configures proxy options')
+    .action(commands.configure);
+
+program
     .command('default')
     .description('Start proxy server')
     .action(commands._default);
@@ -26,5 +31,6 @@ program.parse(process.argv);
 options.mixin(program);
 
 if (!program.args.length) {
+    // Not sure why commander doesn't handle this case...
     commands._default();
 }
