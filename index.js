@@ -9,8 +9,8 @@ var
 
 program
     .version(version)
-    .option('-l, --listen <n>', 'The port to listen on', parseInt, 1337)
-    .option('-t, --target <n>', 'The port to loopback to', parseInt, 9000)
+    .option('-l, --listen <n>', 'The port to listen on', 1337)
+    .option('-t, --target <n>', 'The port to loopback to', 9000)
     .option('-T, --hostname <hostname>', 'The hostname to loopback to')
     .option('-p, --proxy <hostname>', 'The hostname to proxy to')
     .option('-v, --verbose', 'Enable verbose logging')
