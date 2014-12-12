@@ -1,11 +1,14 @@
 #!/usr/bin/env node
+
 'use strict';
 
 var
     program = require('commander'),
     commands = require('./lib/commands'),
     options = require('./lib/options'),
-    version = require('./package.json').version;
+    updateNotifier = require('update-notifier'),
+    pkg = require('./package.json'),
+    version = pkg.version;
 
 program
     .version(version)
@@ -34,3 +37,10 @@ if (!program.args.length) {
     // Not sure why commander doesn't handle this case...
     commands._default();
 }
+
+updateNotifier({
+    packageName: pkg.name,
+    packageVersion: pkg.version
+}).notify({
+    defer: false
+});

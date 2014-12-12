@@ -25,6 +25,7 @@
     "colors": "~1.0.3",
     "commander": "~2.3.0",
     "http-proxy": "~1.4.0",
-    "node-static": "~0.7.6"
+    "node-static": "~0.7.6",
+    "update-notifier": "~0.2.2"
   }
 }
