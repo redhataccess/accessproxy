@@ -5,6 +5,7 @@
 var
     program = require('commander'),
     commands = require('./lib/commands'),
+    config = require('./lib/config'),
     options = require('./lib/options'),
     updateNotifier = require('update-notifier'),
     pkg = require('./package.json'),
@@ -32,6 +33,7 @@ program
 
 program.parse(process.argv);
 options.mixin(program);
+config.init(pkg.name);
 
 if (!program.args.length) {
     // Not sure why commander doesn't handle this case...
