@@ -1,6 +1,6 @@
 {
   "name": "accessproxy",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "main": "index.js",
   "description": "A proxy for local access labs development",
   "homepage": "https://github.com/redhataccess/accessproxy",
