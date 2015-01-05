@@ -1,10 +1,10 @@
-accesslabsproxy
+accessproxy
 ==============
-[![NPM](https://nodei.co/npm/accesslabsproxy.png)](https://nodei.co/npm/accesslabsproxy/)
+[![NPM](https://nodei.co/npm/accessproxy.png)](https://nodei.co/npm/accessproxy/)
 
 Install the module with:
 ```bash
-sudo npm install accesslabsproxy -g
+sudo npm install accessproxy -g
 ```
 
 This line must be in your /etc/hosts file for this proxy to work properly:
@@ -12,7 +12,7 @@ This line must be in your /etc/hosts file for this proxy to work properly:
 
 the module has a helper that will assist with this and can be run with
 ```bash
-npm run -g accesslabsproxy hosts --unsafe
+npm run -g accessproxy hosts --unsafe
 ```
 
 _Note about the `--unsafe`_: This allows the npm script to run as YOUR user... by default npm runs scripts as 'nobody'. This will just execute the [hosts.sh](hosts.sh) script. Feel free to browse that script if you don't trust me. :smirk:

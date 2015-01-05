@@ -1,21 +1,21 @@
 {
-  "name": "accesslabsproxy",
+  "name": "accessproxy",
   "version": "0.2.9",
   "main": "index.js",
   "description": "A proxy for local access labs development",
-  "homepage": "https://github.com/connyay/accesslabsproxy",
-  "bugs": "https://github.com/connyay/accesslabsproxy/issues",
+  "homepage": "https://github.com/redhataccess/accessproxy",
+  "bugs": "https://github.com/redhataccess/accessproxy/issues",
   "author": {
     "name": "Connor Hindley",
     "email": "chindley@redhat.com"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/connyay/accesslabsproxy"
+    "url": "https://github.com/redhataccess/accessproxy"
   },
   "license": "MIT",
   "bin": {
-    "accesslabsproxy": "index.js"
+    "accessproxy": "index.js"
   },
   "scripts": {
     "hosts": "./hosts.sh"

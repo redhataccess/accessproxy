@@ -1,8 +1,8 @@
-site_name: accesslabsproxy
+site_name: accessproxy
 pages:
 - [index.md, Home]
 - [about.md, About]
 - [installation.md, Installation]
 - [usage.md, Usage]
 theme: readthedocs
-repo_url: https://github.com/redhataccess/accesslabsproxy/
+repo_url: https://github.com/redhataccess/accessproxy/
