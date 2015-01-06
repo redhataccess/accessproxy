@@ -1,4 +1,4 @@
-## Options
+## [Options](/usage/#options)
 
 * `accessproxy -h, --help` - Output usage information.
 * `accessproxy -V, --version` - Output the version number.
