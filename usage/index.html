@@ -120,8 +120,26 @@
           <div role="main">
             <div class="section">
               <h2 id="options">Options</h2>
+<ul>
+<li><code>accessproxy -h, --help</code> - Output usage information.</li>
+<li><code>accessproxy -V, --version</code> - Output the version number.</li>
+<li><code>accessproxy -l, --listen &lt;n&gt;</code> - The port to listen on.</li>
+<li><code>accessproxy -t, --target &lt;n&gt;</code> - The port to loopback to.</li>
+<li><code>accessproxy -T, --hostname &lt;hostname&gt;</code> - The hostname to loopback to.</li>
+<li><code>accessproxy -p, --proxy &lt;hostname&gt;</code> - The hostname to proxy to.</li>
+<li><code>accessproxy -v, --verbose</code> - Enable verbose logging.</li>
+<li><code>accessproxy -m, --mode &lt;mode&gt;</code> - Proxy mode (labs, portal, or mixed).</li>
+<li><code>accessproxy -s, --static &lt;path&gt;</code> - Path to serve up static assets.</li>
+</ul>
 <h2 id="commands">Commands</h2>
+<ul>
+<li><code>accessproxy [options]</code> - The default command starts the proxy with the provided options.</li>
+<li><code>accessproxy configure</code> - The configure command invokes configuration process.</li>
+</ul>
 <h2 id="configuration">Configuration</h2>
+<p>Invoke configuration with <code>accessproxy configure</code>.</p>
+<p>Configure will ask you for your preferred hosts.<br />
+The defaults (<code>foo.redhat.com</code> &amp; <code>prod.foo.redhat.com</code> will be used if configuration is not run)</p>
 
             </div>
           </div>
