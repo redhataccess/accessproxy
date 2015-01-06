@@ -12,7 +12,7 @@ Configure the module with:
 accessproxy configure
 ```
 
-[Read the docs](https://redhataccess.github.io/accessproxy/)
+[Read the docs.](https://redhataccess.github.io/accessproxy/)
 
 
 ## License
