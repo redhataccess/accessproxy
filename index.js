@@ -17,7 +17,7 @@ program
     .option('-T, --hostname <hostname>', 'The hostname to loopback to')
     .option('-p, --proxy <hostname>', 'The hostname to proxy to')
     .option('-v, --verbose', 'Enable verbose logging')
-    .option('-m, --mode <mode>', 'Proxy mode (labs, portal, or mixed)', 'labs')
+    .option('-m, --mode <mode>', 'Proxy mode (labs, portal, local, or mixed)', 'labs')
     .option('-s, --static <path>', 'Path to serve up static assets', './');
 
 program
