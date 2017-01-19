@@ -18,7 +18,8 @@ program
     .option('-p, --proxy <hostname>', 'The hostname to proxy to')
     .option('-v, --verbose', 'Enable verbose logging')
     .option('-m, --mode <mode>', 'Proxy mode (labs, portal, or mixed)', 'labs')
-    .option('-s, --static <path>', 'Path to serve up static assets', './');
+    .option('-s, --static <path>', 'Path to serve up static assets', './')
+    .option('--https', 'Turn on loopback to https');
 
 program
     .command('configure')
