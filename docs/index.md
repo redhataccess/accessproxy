@@ -9,3 +9,4 @@
 * `accessproxy -v, --verbose` - Enable verbose logging.
 * `accessproxy -m, --mode <mode>` - Proxy mode (labs, portal, or mixed).
 * `accessproxy -s, --static <path>` - Path to serve up static assets.
+* `accessproxy --https` - Turn on loopback to https.
