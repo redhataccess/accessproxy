@@ -1,0 +1,9 @@
+{
+
+    "fte": "access.devgssfte.devlab.phx1.redhat.com",
+    "ci": "access.devgssci.devlab.phx1.redhat.com",
+    "qa": "access.qa.redhat.com",
+    "stage": "access.stage.redhat.com",
+    "prod": "access.redhat.com"
+    
+}
