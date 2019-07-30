@@ -1,3 +1,5 @@
+**This repo is deprecated.  Please use [spandx](https://github.com/redhataccess/spandx) instead.**
+
 accessproxy
 ==============
 [![NPM](https://nodei.co/npm/accessproxy.png)](https://nodei.co/npm/accessproxy/)
